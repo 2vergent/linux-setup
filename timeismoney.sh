@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 known_compatible_distros=(
                         "Ubuntu"
                         "Debian"
@@ -47,9 +46,6 @@ case $distro in
         sudo apt clean
         sudo apt autoremove
 
-        echo "-----------------------------------------"
-        echo ">       Installing Gnome Tweaks         <"
-        echo "-----------------------------------------"
         function detect_gnome()
         {
             ps -e | grep -E '^.* gnome-session$' > /dev/null
@@ -63,7 +59,11 @@ case $distro in
         }
 
         if detect_gnome;
-            then sudo apt install gnome-tweaks
+            then
+                echo "-----------------------------------------"
+                echo ">       Installing Gnome Tweaks         <"
+                echo "-----------------------------------------"
+                sudo apt install gnome-tweaks
         fi
 
         echo "------------------------------------------"
