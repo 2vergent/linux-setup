@@ -3,8 +3,6 @@
 known_compatible_distros=(
                         "Ubuntu"
                         "Debian"
-                        "SuSE"
-                        "CentOS"
                         "Fedora"
                         "Red Hat"
                         "Arch"
@@ -30,21 +28,21 @@ case $distro in
         echo "---------------------------------"
         echo ">       Updating System         <"
         echo "---------------------------------"
-        sudo apt update && sudo apt upgrade
+        yes | sudo apt update && sudo apt upgrade
 
         echo "----------------------------------"
         echo ">       Removing Firefox         <"
         echo "----------------------------------"
-        sudo apt remove firefox
+        yes | sudo apt remove firefox
         sudo apt clean
-        sudo apt autoremove
+        yes | sudo apt autoremove
 
         echo "--------------------------------------"
         echo ">       Removing LibreOffice         <"
         echo "--------------------------------------"
-        sudo apt remove --purge libreoffice*
+        yes | sudo apt remove --purge libreoffice*
         sudo apt clean
-        sudo apt autoremove
+        yes | sudo apt autoremove
 
         function detect_gnome()
         {
@@ -63,49 +61,49 @@ case $distro in
                 echo "-----------------------------------------"
                 echo ">       Installing Gnome Tweaks         <"
                 echo "-----------------------------------------"
-                sudo apt install gnome-tweaks
+                yes | sudo apt install gnome-tweaks
         fi
 
         echo "------------------------------------------"
         echo ">       Installing Brave Browser         <"
         echo "------------------------------------------"
-        sudo apt install apt-transport-https curl
+        yes | sudo apt install apt-transport-https curl
         sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
         echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
         sudo apt update
-        sudo apt install brave-browser
+        yes | sudo apt install brave-browser
 
         echo "-----------------------------------"
         echo ">       Installing VSCode         <"
         echo "-----------------------------------"
         wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-        sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+        yes | sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
         sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
         rm -f packages.microsoft.gpg
-        sudo apt install apt-transport-https
         sudo apt update
-        sudo apt install code
+        yes | sudo apt install code
 
         echo "------------------------------------"
         echo ">       Installing Spotify         <"
         echo "------------------------------------"
         curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | sudo apt-key add -
         echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-        sudo apt-get update && sudo apt-get install spotify-client
+        sudo apt-get update
+        yes | sudo apt-get install spotify-client
 
         echo "------------------------------------"
         echo ">       Installing Discord         <"
         echo "------------------------------------"
+        cd ~/Downloads
         wget https://dl.discordapp.net/apps/linux/0.0.15/discord-0.0.15.deb
-        sudo apt install ./discord-0.0.15.deb
+        yes | sudo apt install ./discord-0.0.15.deb
 
         echo "---------------------------------------"
         echo ">       Installing OnlyOffice         <"
         echo "---------------------------------------"
-        sudo apt install flatpak
+        yes | sudo apt install flatpak
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-        flatpak install flathub org.onlyoffice.desktopeditors
-        flatpak clean
+        yes | flatpak install -y flathub org.onlyoffice.desktopeditors
 
         echo "------------------------------------------------"
         echo ">       Phew, saved you a lot of time!         <"
@@ -117,28 +115,28 @@ case $distro in
         echo "---------------------------------"
         echo ">       Updating System         <"
         echo "---------------------------------"
-        sudo pacman -Syu
+        yes | sudo pacman -Syu
 
         echo "----------------------------------"
         echo ">       Removing Firefox         <"
         echo "----------------------------------"
-        sudo pacman -Rs firefox
+        yes | sudo pacman -Rs firefox
         sudo updatedb
 
         echo "--------------------------------------"
         echo ">       Removing LibreOffice         <"
         echo "--------------------------------------"
-        sudo pacman -Rs libreoffice
+        yes | sudo pacman -Rs libreoffice
 
         echo "------------------------------------------"
         echo ">       Installing Brave Browser         <"
         echo "------------------------------------------"
-        sudo pacman -S --needed git base-devel
+        yes | sudo pacman -S --needed git base-devel
         cd ~/Downloads
         git clone https://aur.archlinux.org/yay.git
         cd yay
         makepkg -si
-        yay -S brave
+        yes | yay -S brave
 
         echo "-----------------------------------"
         echo ">       Installing VSCode         <"
@@ -147,26 +145,25 @@ case $distro in
         git clone https://AUR.archlinux.org/visual-studio-code-bin.git
         cd visual-studio-code-bin/
         makepkg -s
-        sudo pacman -U visual-studio-code-bin-*.pkg.tar.xz
+        yes | sudo pacman -U visual-studio-code-bin-*.pkg.tar.xz
         cd ../ && sudo rm -rfv visual-studio-code-bin/
 
         echo "------------------------------------"
         echo ">       Installing Spotify         <"
         echo "------------------------------------"
-        sudo pacman -Sy flatpak
+        yes | sudo pacman -Sy flatpak
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-        flatpak install flathub com.spotify.Client
+        yes | flatpak install -y flathub com.spotify.Client
 
         echo "------------------------------------"
         echo ">       Installing Discord         <"
         echo "------------------------------------"
-        flatpak install flathub com.discordapp.Discord
+        yes | flatpak install -y flathub com.discordapp.Discord
 
         echo "---------------------------------------"
         echo ">       Installing OnlyOffice         <"
         echo "---------------------------------------"
-        flatpak install flathub org.onlyoffice.desktopeditors
-        flatpak clean
+        yes | flatpak install -y  flathub org.onlyoffice.desktopeditors
 
         echo "------------------------------------------------"
         echo ">       Phew, saved you a lot of time!         <"
