@@ -25,21 +25,21 @@ case $distro in
 
     Ubuntu)
 
-        echo "---------------------------------"
-        echo ">       Updating System         <"
-        echo "---------------------------------"
+        echo "---------------------------------------"
+        echo ">       [1/9] Updating System         <"
+        echo "---------------------------------------"
         yes | sudo apt update && sudo apt upgrade
 
-        echo "----------------------------------"
-        echo ">       Removing Firefox         <"
-        echo "----------------------------------"
+        echo "----------------------------------------"
+        echo ">       [2/9] Removing Firefox         <"
+        echo "----------------------------------------"
         yes | sudo apt remove firefox
         sudo apt clean
         yes | sudo apt autoremove
 
-        echo "--------------------------------------"
-        echo ">       Removing LibreOffice         <"
-        echo "--------------------------------------"
+        echo "--------------------------------------------"
+        echo ">       [3/9] Removing LibreOffice         <"
+        echo "--------------------------------------------"
         yes | sudo apt remove --purge libreoffice*
         sudo apt clean
         yes | sudo apt autoremove
@@ -58,24 +58,24 @@ case $distro in
 
         if detect_gnome;
             then
-                echo "-----------------------------------------"
-                echo ">       Installing Gnome Tweaks         <"
-                echo "-----------------------------------------"
+                echo "-----------------------------------------------"
+                echo ">       [4/9] Installing Gnome Tweaks         <"
+                echo "-----------------------------------------------"
                 yes | sudo apt install gnome-tweaks
         fi
 
-        echo "------------------------------------------"
-        echo ">       Installing Brave Browser         <"
-        echo "------------------------------------------"
+        echo "------------------------------------------------"
+        echo ">       [5/9] Installing Brave Browser         <"
+        echo "------------------------------------------------"
         yes | sudo apt install apt-transport-https curl
         sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
         echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
         sudo apt update
         yes | sudo apt install brave-browser
 
-        echo "-----------------------------------"
-        echo ">       Installing VSCode         <"
-        echo "-----------------------------------"
+        echo "-----------------------------------------"
+        echo ">       [6/9] Installing VSCode         <"
+        echo "-----------------------------------------"
         wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
         yes | sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
         sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
@@ -83,24 +83,24 @@ case $distro in
         sudo apt update
         yes | sudo apt install code
 
-        echo "------------------------------------"
-        echo ">       Installing Spotify         <"
-        echo "------------------------------------"
+        echo "------------------------------------------"
+        echo ">       [7/9] Installing Spotify         <"
+        echo "------------------------------------------"
         curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | sudo apt-key add -
         echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
         sudo apt-get update
         yes | sudo apt-get install spotify-client
 
-        echo "------------------------------------"
-        echo ">       Installing Discord         <"
-        echo "------------------------------------"
+        echo "------------------------------------------"
+        echo ">       [8/9] Installing Discord         <"
+        echo "------------------------------------------"
         cd ~/Downloads
         wget https://dl.discordapp.net/apps/linux/0.0.15/discord-0.0.15.deb
         yes | sudo apt install ./discord-0.0.15.deb
 
-        echo "---------------------------------------"
-        echo ">       Installing OnlyOffice         <"
-        echo "---------------------------------------"
+        echo "---------------------------------------------"
+        echo ">       [9/9] Installing OnlyOffice         <"
+        echo "---------------------------------------------"
         yes | sudo apt install flatpak
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         yes | flatpak install -y flathub org.onlyoffice.desktopeditors
@@ -112,25 +112,45 @@ case $distro in
     
     Arch)
 
-        echo "---------------------------------"
-        echo ">       Updating System         <"
-        echo "---------------------------------"
+        echo "---------------------------------------"
+        echo ">       [1/9] Updating System         <"
+        echo "---------------------------------------"
         yes | sudo pacman -Syu
 
-        echo "----------------------------------"
-        echo ">       Removing Firefox         <"
-        echo "----------------------------------"
+        echo "----------------------------------------"
+        echo ">       [2/9] Removing Firefox         <"
+        echo "----------------------------------------"
         yes | sudo pacman -Rs firefox
         sudo updatedb
 
-        echo "--------------------------------------"
-        echo ">       Removing LibreOffice         <"
-        echo "--------------------------------------"
+        echo "--------------------------------------------"
+        echo ">       [3/9] Removing LibreOffice         <"
+        echo "--------------------------------------------"
         yes | sudo pacman -Rs libreoffice
 
-        echo "------------------------------------------"
-        echo ">       Installing Brave Browser         <"
-        echo "------------------------------------------"
+        function detect_gnome()
+        {
+            ps -e | grep -E '^.* gnome-session$' > /dev/null
+            if [ $? -ne 0 ];
+            then
+            return 0
+            fi
+            VERSION=`gnome-session --version | awk '{print $2}'`
+            DESKTOP="GNOME"
+            return 1
+        }
+
+        if detect_gnome;
+            then
+                echo "-----------------------------------------------"
+                echo ">       [4/9] Installing Gnome Tweaks         <"
+                echo "-----------------------------------------------"
+                yes | sudo apt install gnome-tweaks
+        fi
+
+        echo "------------------------------------------------"
+        echo ">       [5/9] Installing Brave Browser         <"
+        echo "------------------------------------------------"
         yes | sudo pacman -S --needed git base-devel
         cd ~/Downloads
         git clone https://aur.archlinux.org/yay.git
@@ -138,9 +158,9 @@ case $distro in
         makepkg -si
         yes | yay -S brave
 
-        echo "-----------------------------------"
-        echo ">       Installing VSCode         <"
-        echo "-----------------------------------"
+        echo "-----------------------------------------"
+        echo ">       [6/9] Installing VSCode         <"
+        echo "-----------------------------------------"
         cd ~/Downloads
         git clone https://AUR.archlinux.org/visual-studio-code-bin.git
         cd visual-studio-code-bin/
@@ -148,21 +168,21 @@ case $distro in
         yes | sudo pacman -U visual-studio-code-bin-*.pkg.tar.xz
         cd ../ && sudo rm -rfv visual-studio-code-bin/
 
-        echo "------------------------------------"
-        echo ">       Installing Spotify         <"
-        echo "------------------------------------"
+        echo "------------------------------------------"
+        echo ">       [7/9] Installing Spotify         <"
+        echo "------------------------------------------"
         yes | sudo pacman -Sy flatpak
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         yes | flatpak install -y flathub com.spotify.Client
 
-        echo "------------------------------------"
-        echo ">       Installing Discord         <"
-        echo "------------------------------------"
+        echo "------------------------------------------"
+        echo ">       [8/9] Installing Discord         <"
+        echo "------------------------------------------"
         yes | flatpak install -y flathub com.discordapp.Discord
 
-        echo "---------------------------------------"
-        echo ">       Installing OnlyOffice         <"
-        echo "---------------------------------------"
+        echo "---------------------------------------------"
+        echo ">       [9/9] Installing OnlyOffice         <"
+        echo "---------------------------------------------"
         yes | flatpak install -y  flathub org.onlyoffice.desktopeditors
 
         echo "------------------------------------------------"
