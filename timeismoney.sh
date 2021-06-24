@@ -111,6 +111,11 @@ case $distro in
         yes | sudo apt install zsh
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+        echo -e "\n"
+
+        echo "--------------------------------------------------------"
+        echo "> Authentication required for making ZSH defualt shell <"
+        echo "--------------------------------------------------------"
         chsh -s /usr/bin/zsh
 
         echo "----------------------------------------------------------"
@@ -167,7 +172,7 @@ case $distro in
                 echo "-----------------------------------------------"
                 echo ">       [4/11] Installing Gnome Tweaks         <"
                 echo "-----------------------------------------------"
-                yes | sudo apt install gnome-tweaks
+                yes | sudo pacman -S gnome-tweaks
         fi
 
         echo "------------------------------------------------"
