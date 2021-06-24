@@ -6,6 +6,7 @@ known_compatible_distros=(
                         "Fedora"
                         "Red Hat"
                         "Arch"
+                        "Manjaro"
                     )
 
 function detect_distro_phase() {
@@ -23,7 +24,7 @@ detect_distro_phase
 
 case $distro in
 
-    Ubuntu)
+    Ubuntu | Debian)
 
         echo "----------------------------------------"
         echo ">       [1/11] Updating System         <"
@@ -103,7 +104,7 @@ case $distro in
         echo "---------------------------------------------"
         yes | sudo apt install flatpak
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-        yes | flatpak install -y flathub org.onlyoffice.desktopeditors
+        flatpak install -y flathub org.onlyoffice.desktopeditors
 
         echo "-----------------------------------------------"
         echo ">       [10/11] Installing ZSH Shell         <"
@@ -111,12 +112,6 @@ case $distro in
         yes | sudo apt install zsh
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-        echo -e "\n"
-
-        echo "--------------------------------------------------------"
-        echo "> Authentication required for making ZSH defualt shell <"
-        echo "--------------------------------------------------------"
-        chsh -s /usr/bin/zsh
 
         echo "----------------------------------------------------------"
         echo ">       [11/11] Adding your bash and zsh aliases         <"
@@ -131,13 +126,19 @@ case $distro in
         echo 'alias cls="clear"' >> ~/.zshrc
         echo 'alias update="sudo apt update && sudo apt upgrade"' >> ~/.zshrc
         echo 'Added aliases to .zshrc'
+        echo -e "\n"
+
+        echo "--------------------------------------------------------"
+        echo "> Authentication required for making ZSH defualt shell <"
+        echo "--------------------------------------------------------"
+        chsh -s /usr/bin/zsh
 
         echo "------------------------------------------------"
         echo ">       Phew, saved you a lot of time!         <"
         echo "------------------------------------------------"
         ;;
     
-    Arch)
+    Arch | Manjaro)
 
         echo "---------------------------------------"
         echo ">       [1/11] Updating System         <"
@@ -200,17 +201,17 @@ case $distro in
         echo "------------------------------------------"
         yes | sudo pacman -Sy flatpak
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-        yes | flatpak install -y flathub com.spotify.Client
+        flatpak install -y flathub com.spotify.Client
 
         echo "------------------------------------------"
         echo ">       [8/11] Installing Discord         <"
         echo "------------------------------------------"
-        yes | flatpak install -y flathub com.discordapp.Discord
+        flatpak install -y flathub com.discordapp.Discord
 
         echo "---------------------------------------------"
         echo ">       [9/11] Installing OnlyOffice         <"
         echo "---------------------------------------------"
-        yes | flatpak install -y  flathub org.onlyoffice.desktopeditors
+        flatpak install -y  flathub org.onlyoffice.desktopeditors
 
         echo "-----------------------------------------------"
         echo ">       [10/11] Installing ZSH Shell         <"
@@ -218,7 +219,6 @@ case $distro in
         yes | sudo apt install zsh
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-        chsh -s /usr/bin/zsh
 
         echo "----------------------------------------------------------"
         echo ">       [11/11] Adding your bash and zsh aliases         <"
@@ -233,6 +233,12 @@ case $distro in
         echo 'alias cls="clear"' >> ~/.zshrc
         echo 'alias update="sudo apt update && sudo apt upgrade"' >> ~/.zshrc
         echo 'Added aliases to .zshrc'
+        echo -e '\n'
+
+        echo "--------------------------------------------------------"
+        echo "> Authentication required for making ZSH defualt shell <"
+        echo "--------------------------------------------------------"
+        chsh -s /usr/bin/zsh
 
         echo "------------------------------------------------"
         echo ">       Phew, saved you a lot of time!         <"
