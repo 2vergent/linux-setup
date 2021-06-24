@@ -9,15 +9,29 @@ known_compatible_distros=(
                         "Manjaro"
                     )
 
-function detect_distro_phase() {
-
-    for i in "${known_compatible_distros[@]}"; do
+function detect_distro_phase() 
+{
+    for i in "${known_compatible_distros[@]}"; 
+    do
         uname -a | grep "${i}" -i > /dev/null
-        if [ "$?" = "0" ]; then
-            distro="${i^}"
-            break
+        if [ "$?" = "0" ]; 
+            then
+                distro="${i^}"
+                break
         fi
     done
+}
+
+function detect_gnome()
+{
+    ps -e | grep -E '^.* gnome-session$' > /dev/null
+    if [ $? -ne 0 ];
+        then
+            return 0
+    fi
+    VERSION=`gnome-session --version | awk '{print $2}'`
+    DESKTOP="GNOME"
+    return 1
 }
 
 detect_distro_phase
@@ -44,18 +58,6 @@ case $distro in
         yes | sudo apt remove --purge libreoffice*
         sudo apt clean
         yes | sudo apt autoremove
-
-        function detect_gnome()
-        {
-            ps -e | grep -E '^.* gnome-session$' > /dev/null
-            if [ $? -ne 0 ];
-            then
-            return 0
-            fi
-            VERSION=`gnome-session --version | awk '{print $2}'`
-            DESKTOP="GNOME"
-            return 1
-        }
 
         if detect_gnome;
             then
@@ -110,12 +112,14 @@ case $distro in
         echo ">       [10/11] Installing ZSH Shell         <"
         echo "-----------------------------------------------"
         yes | sudo apt install zsh
-        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        yes n | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+        git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 
-        echo "----------------------------------------------------------"
-        echo ">       [11/11] Adding your bash and zsh aliases         <"
-        echo "----------------------------------------------------------"
+        echo "-----------------------------------------------------------"
+        echo ">       [11/11] Updating .bashrc and .zshrc files         <"
+        echo "-----------------------------------------------------------"
         echo -e '\n' >> ~/.bashrc
         echo '# Your aliases' >> ~/.bashrc
         echo 'alias cls="clear"' >> ~/.bashrc
@@ -126,7 +130,10 @@ case $distro in
         echo 'alias cls="clear"' >> ~/.zshrc
         echo 'alias update="sudo apt update && sudo apt upgrade"' >> ~/.zshrc
         echo 'Added aliases to .zshrc'
-        echo -e "\n"
+        sed -i '/^ZSH_THEME=/s/=.*/="powerlevel10k\/powerlevel10k"/' ~/.zshrc
+        echo 'Set ZSH theme to Powerlevel10k'
+        sed -i '/^plugins=/s/=.*/=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+        echo 'Updated new plugins in .zshrc'
 
         echo "--------------------------------------------------------"
         echo "> Authentication required for making ZSH defualt shell <"
@@ -155,18 +162,6 @@ case $distro in
         echo ">       [3/11] Removing LibreOffice         <"
         echo "--------------------------------------------"
         yes | sudo pacman -Rs libreoffice
-
-        function detect_gnome()
-        {
-            ps -e | grep -E '^.* gnome-session$' > /dev/null
-            if [ $? -ne 0 ];
-            then
-            return 0
-            fi
-            VERSION=`gnome-session --version | awk '{print $2}'`
-            DESKTOP="GNOME"
-            return 1
-        }
 
         if detect_gnome;
             then
@@ -217,8 +212,10 @@ case $distro in
         echo ">       [10/11] Installing ZSH Shell         <"
         echo "-----------------------------------------------"
         yes | sudo apt install zsh
-        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        yes n | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+        git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 
         echo "----------------------------------------------------------"
         echo ">       [11/11] Adding your bash and zsh aliases         <"
@@ -233,7 +230,10 @@ case $distro in
         echo 'alias cls="clear"' >> ~/.zshrc
         echo 'alias update="sudo apt update && sudo apt upgrade"' >> ~/.zshrc
         echo 'Added aliases to .zshrc'
-        echo -e '\n'
+        sed -i '/^ZSH_THEME=/s/=.*/="powerlevel10k\/powerlevel10k"/' ~/.zshrc
+        echo 'Set ZSH theme to Powerlevel10k'
+        sed -i '/^plugins=/s/=.*/=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+        echo 'Updated new plugins in .zshrc'
 
         echo "--------------------------------------------------------"
         echo "> Authentication required for making ZSH defualt shell <"
