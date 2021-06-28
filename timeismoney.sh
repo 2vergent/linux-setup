@@ -3,8 +3,6 @@
 known_compatible_distros=(
                         "Ubuntu"
                         "Debian"
-                        "Fedora"
-                        "Red Hat"
                         "Arch"
                         "Manjaro"
                     )
@@ -65,6 +63,10 @@ case $distro in
                 echo ">       [4/11] Installing Gnome Tweaks         <"
                 echo "------------------------------------------------"
                 yes | sudo apt install gnome-tweaks
+        else
+            echo "------------------------------------------------------------------"
+            echo ">       [4/11] Gnome not detected, skipping gnome-tweaks         <"
+            echo "------------------------------------------------------------------"
         fi
 
         echo "-------------------------------------------------"
@@ -108,9 +110,9 @@ case $distro in
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         flatpak install -y flathub org.onlyoffice.desktopeditors
 
-        echo "-----------------------------------------------"
-        echo ">       [10/11] Installing ZSH Shell         <"
-        echo "-----------------------------------------------"
+        echo "-------------------------------------------------------------"
+        echo ">       [10/11] Installing ZSH Shell and ZSH plugins        <"
+        echo "-------------------------------------------------------------"
         yes | sudo apt install zsh
         yes n | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -169,6 +171,10 @@ case $distro in
                 echo ">       [4/11] Installing Gnome Tweaks         <"
                 echo "-----------------------------------------------"
                 yes | sudo pacman -S gnome-tweaks
+        else
+            echo "------------------------------------------------------------------"
+            echo ">       [4/11] Gnome not detected, skipping gnome-tweaks         <"
+            echo "------------------------------------------------------------------"
         fi
 
         echo "------------------------------------------------"
@@ -208,9 +214,9 @@ case $distro in
         echo "---------------------------------------------"
         flatpak install -y  flathub org.onlyoffice.desktopeditors
 
-        echo "-----------------------------------------------"
-        echo ">       [10/11] Installing ZSH Shell         <"
-        echo "-----------------------------------------------"
+        echo "-------------------------------------------------------------"
+        echo ">       [10/11] Installing ZSH Shell and ZSH plugins        <"
+        echo "-------------------------------------------------------------"
         yes | sudo apt install zsh
         yes n | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
