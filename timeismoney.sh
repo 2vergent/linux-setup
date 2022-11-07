@@ -39,19 +39,17 @@ case $distro in
     Ubuntu | Debian)
 
         echo "----------------------------------------"
-        echo ">       [1/11] Updating System         <"
+        echo ">       [1/10] Updating System         <"
         echo "----------------------------------------"
-        yes | sudo apt update && sudo apt upgrade
+        yes | sudo apt update && sudo apt upgrade && sudo apt install git
 
-        echo "-----------------------------------------"
-        echo ">       [2/11] Removing Firefox         <"
-        echo "-----------------------------------------"
-        yes | sudo apt remove firefox
-        sudo apt clean
-        yes | sudo apt autoremove
+        echo "------------------------------------------"
+        echo ">       [2/10] Installing Firefox         <"
+        echo "------------------------------------------"
+        sudo apt install firefox
 
         echo "---------------------------------------------"
-        echo ">       [3/11] Removing LibreOffice         <"
+        echo ">       [3/10] Removing LibreOffice         <"
         echo "---------------------------------------------"
         yes | sudo apt remove --purge libreoffice*
         sudo apt clean
@@ -60,26 +58,17 @@ case $distro in
         if detect_gnome;
             then
                 echo "------------------------------------------------"
-                echo ">       [4/11] Installing Gnome Tweaks         <"
+                echo ">       [4/10] Installing Gnome Tweaks         <"
                 echo "------------------------------------------------"
                 yes | sudo apt install gnome-tweaks
         else
             echo "------------------------------------------------------------------"
-            echo ">       [4/11] Gnome not detected, skipping gnome-tweaks         <"
+            echo ">       [4/10] Gnome not detected, skipping gnome-tweaks         <"
             echo "------------------------------------------------------------------"
         fi
 
-        echo "-------------------------------------------------"
-        echo ">       [5/11] Installing Brave Browser         <"
-        echo "-------------------------------------------------"
-        yes | sudo apt install apt-transport-https curl
-        sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-        echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
-        sudo apt update
-        yes | sudo apt install brave-browser
-
         echo "------------------------------------------"
-        echo ">       [6/11] Installing VSCode         <"
+        echo ">       [5/10] Installing VSCode         <"
         echo "------------------------------------------"
         wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
         yes | sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
@@ -89,7 +78,7 @@ case $distro in
         yes | sudo apt install code
 
         echo "-------------------------------------------"
-        echo ">       [7/11] Installing Spotify         <"
+        echo ">       [6/10] Installing Spotify         <"
         echo "-------------------------------------------"
         curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | sudo apt-key add -
         echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
@@ -97,21 +86,21 @@ case $distro in
         yes | sudo apt-get install spotify-client
 
         echo "-------------------------------------------"
-        echo ">       [8/11] Installing Discord         <"
+        echo ">       [7/10] Installing Discord         <"
         echo "-------------------------------------------"
         cd ~/Downloads
         wget https://dl.discordapp.net/apps/linux/0.0.15/discord-0.0.15.deb
         yes | sudo apt install ./discord-0.0.15.deb
 
         echo "---------------------------------------------"
-        echo ">       [9/11] Installing OnlyOffice         <"
+        echo ">       [8/10] Installing OnlyOffice         <"
         echo "---------------------------------------------"
         yes | sudo apt install flatpak
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         flatpak install -y flathub org.onlyoffice.desktopeditors
 
         echo "-------------------------------------------------------------"
-        echo ">       [10/11] Installing ZSH Shell and ZSH plugins        <"
+        echo ">       [9/10] Installing ZSH Shell and ZSH plugins        <"
         echo "-------------------------------------------------------------"
         yes | sudo apt install zsh
         yes n | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -120,7 +109,7 @@ case $distro in
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 
         echo "-----------------------------------------------------------"
-        echo ">       [11/11] Updating .bashrc and .zshrc files         <"
+        echo ">       [10/10] Updating .bashrc and .zshrc files         <"
         echo "-----------------------------------------------------------"
         echo -e '\n' >> ~/.bashrc
         echo '# Your aliases' >> ~/.bashrc
@@ -150,45 +139,35 @@ case $distro in
     Arch | Manjaro)
 
         echo "---------------------------------------"
-        echo ">       [1/11] Updating System         <"
+        echo ">       [1/10] Updating System         <"
         echo "---------------------------------------"
         yes | sudo pacman -Syu
+        sudo pacman -S git
 
-        echo "----------------------------------------"
-        echo ">       [2/11] Removing Firefox         <"
-        echo "----------------------------------------"
-        yes | sudo pacman -Rs firefox
-        sudo updatedb
+        echo "------------------------------------------"
+        echo ">       [2/10] Installing Firefox         <"
+        echo "------------------------------------------"
+        sudo pacman -S firefox
 
         echo "--------------------------------------------"
-        echo ">       [3/11] Removing LibreOffice         <"
+        echo ">       [3/10] Removing LibreOffice         <"
         echo "--------------------------------------------"
         yes | sudo pacman -Rs libreoffice
 
         if detect_gnome;
             then
                 echo "-----------------------------------------------"
-                echo ">       [4/11] Installing Gnome Tweaks         <"
+                echo ">       [4/10] Installing Gnome Tweaks         <"
                 echo "-----------------------------------------------"
                 yes | sudo pacman -S gnome-tweaks
         else
             echo "------------------------------------------------------------------"
-            echo ">       [4/11] Gnome not detected, skipping gnome-tweaks         <"
+            echo ">       [4/10] Gnome not detected, skipping gnome-tweaks         <"
             echo "------------------------------------------------------------------"
         fi
 
-        echo "------------------------------------------------"
-        echo ">       [5/11] Installing Brave Browser         <"
-        echo "------------------------------------------------"
-        yes | sudo pacman -S --needed git base-devel
-        cd ~/Downloads
-        git clone https://aur.archlinux.org/yay.git
-        cd yay
-        makepkg -si
-        yes | yay -S brave
-
         echo "-----------------------------------------"
-        echo ">       [6/11] Installing VSCode         <"
+        echo ">       [5/10] Installing VSCode         <"
         echo "-----------------------------------------"
         cd ~/Downloads
         git clone https://AUR.archlinux.org/visual-studio-code-bin.git
@@ -198,33 +177,33 @@ case $distro in
         cd ../ && sudo rm -rfv visual-studio-code-bin/
 
         echo "------------------------------------------"
-        echo ">       [7/11] Installing Spotify         <"
+        echo ">       [6/10] Installing Spotify         <"
         echo "------------------------------------------"
         yes | sudo pacman -Sy flatpak
         flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         flatpak install -y flathub com.spotify.Client
 
         echo "------------------------------------------"
-        echo ">       [8/11] Installing Discord         <"
+        echo ">       [7/10] Installing Discord         <"
         echo "------------------------------------------"
         flatpak install -y flathub com.discordapp.Discord
 
         echo "---------------------------------------------"
-        echo ">       [9/11] Installing OnlyOffice         <"
+        echo ">       [8/10] Installing OnlyOffice         <"
         echo "---------------------------------------------"
         flatpak install -y  flathub org.onlyoffice.desktopeditors
 
         echo "-------------------------------------------------------------"
-        echo ">       [10/11] Installing ZSH Shell and ZSH plugins        <"
+        echo ">       [9/10] Installing ZSH Shell and ZSH plugins        <"
         echo "-------------------------------------------------------------"
-        yes | sudo apt install zsh
+        yes | sudo pacman -S zsh
         yes n | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
         git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 
         echo "----------------------------------------------------------"
-        echo ">       [11/11] Adding your bash and zsh aliases         <"
+        echo ">       [10/10] Adding your bash and zsh aliases         <"
         echo "----------------------------------------------------------"
         echo -e '\n' >> ~/.bashrc
         echo '# Your aliases' >> ~/.bashrc
