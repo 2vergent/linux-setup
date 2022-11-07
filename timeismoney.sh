@@ -61,6 +61,7 @@ case $distro in
                 echo ">       [4/10] Installing Gnome Tweaks         <"
                 echo "------------------------------------------------"
                 yes | sudo apt install gnome-tweaks
+                gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize-or-previews'
         else
             echo "------------------------------------------------------------------"
             echo ">       [4/10] Gnome not detected, skipping gnome-tweaks         <"
@@ -105,8 +106,6 @@ case $distro in
         yes | sudo apt install zsh
         yes n | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-        git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 
         echo "-----------------------------------------------------------"
         echo ">       [10/10] Updating .bashrc and .zshrc files         <"
@@ -121,6 +120,8 @@ case $distro in
         echo 'alias cls="clear"' >> ~/.zshrc
         echo 'alias update="sudo apt update && sudo apt upgrade"' >> ~/.zshrc
         echo 'Added aliases to .zshrc'
+        git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
         sed -i '/^ZSH_THEME=/s/=.*/="powerlevel10k\/powerlevel10k"/' ~/.zshrc
         echo 'Set ZSH theme to Powerlevel10k'
         sed -i '/^plugins=/s/=.*/=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
@@ -160,6 +161,7 @@ case $distro in
                 echo ">       [4/10] Installing Gnome Tweaks         <"
                 echo "-----------------------------------------------"
                 yes | sudo pacman -S gnome-tweaks
+                gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize-or-previews'
         else
             echo "------------------------------------------------------------------"
             echo ">       [4/10] Gnome not detected, skipping gnome-tweaks         <"
@@ -199,8 +201,6 @@ case $distro in
         yes | sudo pacman -S zsh
         yes n | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-        git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 
         echo "----------------------------------------------------------"
         echo ">       [10/10] Adding your bash and zsh aliases         <"
@@ -215,6 +215,8 @@ case $distro in
         echo 'alias cls="clear"' >> ~/.zshrc
         echo 'alias update="sudo apt update && sudo apt upgrade"' >> ~/.zshrc
         echo 'Added aliases to .zshrc'
+        git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
         sed -i '/^ZSH_THEME=/s/=.*/="powerlevel10k\/powerlevel10k"/' ~/.zshrc
         echo 'Set ZSH theme to Powerlevel10k'
         sed -i '/^plugins=/s/=.*/=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
